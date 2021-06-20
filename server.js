@@ -21,13 +21,10 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-app.get('/video_call', (req, res) => {
+app.get('/jitsi_stable', (req, res) => {
     res.render('jitsi_meet');
 }) 
 
-app.get('/my_video', (req, res) => {
-    res.render('room');
-}) 
 
 //listening into port 3030
 server.listen(3030); 
