@@ -1,15 +1,22 @@
 // the application will use express framework
 const express = require('express');
 const app = express();
+const path = require('path');
 const server = require('http').Server(app);
+const peers = {}
+
 app.use(require('cors')())
+app.use(express.static(__dirname + '/public'));
+  
+//peerjs
+const { ExpressPeerServer } = require('peer');
+const peerServer = ExpressPeerServer(server, {
+    debug: true
+});
+app.use('/peerjs', peerServer);
 
 
 const io = require('socket.io')(server)
-
-
-// set public url for script files
-app.use(express.static('public'));
 
 // set EJS as view engine
 app.set('view engine', 'ejs');
@@ -17,16 +24,41 @@ app.set('view engine', 'ejs');
 //import version 4 of uuid library
 const { v4: uuidv4} = require('uuid');
 
-app.get('/', (req, res) => { 
+app.get('/', (req, res) => {
     res.render('index');
+})
+
+app.get('/video_call/', (req, res) => { 
+    console.log("Entering main route!");
+    //res.status(200).send("Hello World!");
+    //res.render('room');
+    //going to this route will redirect you to a newly generated uuid
+    res.redirect(`/video_call/${uuidv4()}`);
 });
 
-app.get('/jitsi_stable', (req, res) => {
-    res.render('jitsi_meet');
+app.get('/video_call/:room', (req, res) => {
+    res.render('room', {room_id: req.params.room});
 }) 
+
+io.on('connection', socket => {
+    socket.on('join-room', (room_id, user_id) => {
+        console.log("Someone has joined the room!");
+        socket.join(room_id);  
+        // socket.to(roomId).broadcast.emit('user-connected');
+        // socket.broadcast.to(roomid).emit('user-connected');
+        socket.broadcast.to(room_id).emit('user-connected', user_id);
+        socket.on('message', message => {
+            io.to(room_id).emit('new_message', message) 
+        })
+    }),
+    socket.on('disconnect', (room_id, user_id) => {
+        // socket.to(roomId).broadcast.emit('user-disconnected', userId)
+        socket.broadcast.to(room_id).emit('user-disconnected', user_id);
+    })
+    
+})
+
 
 
 //listening into port 3030
 server.listen(3030); 
-
-  
