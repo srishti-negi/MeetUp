@@ -44,16 +44,14 @@ io.on('connection', socket => {
     socket.on('join-room', (room_id, user_id) => {
         console.log("Someone has joined the room!");
         socket.join(room_id);  
-        // socket.to(roomId).broadcast.emit('user-connected');
-        // socket.broadcast.to(roomid).emit('user-connected');
         socket.broadcast.to(room_id).emit('user-connected', user_id);
         socket.on('message', message => {
             io.to(room_id).emit('new_message', message) 
         })
-    }),
-    socket.on('disconnect', (room_id, user_id) => {
-        // socket.to(roomId).broadcast.emit('user-disconnected', userId)
-        socket.broadcast.to(room_id).emit('user-disconnected', user_id);
+        socket.on('disconnect', () => {
+            console.log("Broadcassting close event!")
+            socket.broadcast.to(room_id).emit('user-disconnected', user_id);
+        })
     })
     
 })

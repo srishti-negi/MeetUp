@@ -1,6 +1,3 @@
-// const { text } = require("express");
-
-// Javascript for front-end
 let my_video_stream;
 console.log("script has entered the chat")
 const socket = io('/');
@@ -27,7 +24,6 @@ const video_grid = document.getElementById('video-grid');
 console.log(video_grid);
 
 navigator.mediaDevices.getUserMedia({
-    // access audio-video feature
     video: true, 
     audio: true
 }).then(stream => {
@@ -49,11 +45,6 @@ navigator.mediaDevices.getUserMedia({
         })
     })
 
-    // socket.on('user-connected', (user_id) => {
-    //     console.log("user connected, userid: " + user_id);
-    //     connect_to_new_user(user_id, stream);
-    // })
-
     socket.on('user-connected', userId => {
         // user is joining
         setTimeout(() => {
@@ -62,11 +53,13 @@ navigator.mediaDevices.getUserMedia({
         }, 1000)
       })
 
-    socket.on('user-disconnected', userId => {
-        console.log("bye peer: " + peer);
-        if (peers[userId])
-          peers[userId].close()
-      })
+    // socket.on('user-disconnected', userId => {
+    //     console.log("heard a close event broadcast")
+    //     if (peers[userId]) {
+    //         peers[userId].close()
+    //         console.log("Closing connection")
+    //     }
+    //   })
 
     let chat_input = $('input')
     console.log(chat_input)
@@ -89,6 +82,14 @@ navigator.mediaDevices.getUserMedia({
       
 })
 
+socket.on('user-disconnected', userId => {
+    console.log("heard a close event broadcast" + peers[userId])
+    if (peers[userId]) {
+        peers[userId].close()
+        console.log("Closing connection")
+    }
+})
+
 console.log("script.js: " + room_id);
 
 peer.on('open', id => {
@@ -102,16 +103,15 @@ const connect_to_new_user = (user_id, stream) => {
     call.on('stream', user_video_stream => {
         addVideoStream(video, user_video_stream);
     })
-    // call.on('close', () => {
-    //   console.log('video removed')
-    //   video.remove()
-    // })
-    peer[user_id] = call;
+    call.on('close', () => {
+        video.remove()
+    })
+    peers[user_id] = call;
     console.log("new peer: " + peer);
     console.log("new user is here :)");
+    console.log("peers[userid] " + peers[user_id])
 }
 
-//take video object and play the stream
 const addVideoStream = (video, stream) => {
     video.srcObject = stream;
     video.addEventListener('loadedmetadata', () => {
@@ -120,25 +120,6 @@ const addVideoStream = (video, stream) => {
     console.log("video appended" + video);
     video_grid.append(video); 
 }
-
-
-// let chat_input = $('input')
-// console.log(chat_input)
-
-// //enter key = 13
-// $('html').keydown((key_pressed) => {
-
-//     if(key_pressed.which == 13 && chat_input.val().length > 0) {
-//         socket.emit('message', chat_input.val());
-//         console.log(chat_input.val());
-//         chat_input.val("");
-//     }
-// })
-
-// socket.on('new_message', message => {
-//     console.log("message recieved from server " + message)
-//     $('ul').append(`<li class = "messages"><b>user  </b>${message} </li>`)
-// })
 
 const bottom_scroll = () => {
     var window_componenet = $('chat_window');
@@ -192,3 +173,5 @@ const set_camera_open = () => {
     <span>video off</span>`
     document.querySelector('.camera_button').innerHTML = html;
 }
+
+
