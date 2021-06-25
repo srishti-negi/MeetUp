@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teams</title>
+    <link rel = "stylesheet" href = "style.css"> 
+    <script> 
+        const room_id = "<%= room_id %>";
+        console.log("room.ejs : room id is : " + room_id);
+    </script>
+    <!-- <script src = "/user.js"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/da97708ad0.js"></script>
+    <script src = "/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <link rel="stylesheet" href="/style.css">
+    <!-- <link rel="stylesheet" href="/vendor/fontawesome-free/css/fontawesome.min.css"> -->
+    <script src="https://use.fontawesome.com/da97708ad0.js"></script>
+</head>
+<body>    
+    <div class = "main_section">
+        <div class = "left_section">
+            <div class = "header">
+                <h1>I hate errors!!!!!!!!!!!!!!!!!!!</h1>
+            </div>
+            <div class = "main_video">
+                <center>
+                <div id = "video-grid">
+
+                </div>
+                </center>
+            </div>
+            <div class = "main_controls">
+                <!-- <h1>toolbar here</h1> -->
+                <div class = "main_buttons">
+                    <div class = "main_button mute_button" onclick="toggle_mic()">
+                        <i class="fa fa-microphone"></i>
+                        <span>mute</span>
+                    </div>
+                    <div class = "main_button camera_button" onclick="toggle_camera()">
+                        <i class="fa fa-camera"></i>
+                        <span>video</span>
+                    </div>
+                </div>
+                <div class = "main_buttons">
+                    <div class = "main_button">
+                        <i class="fa fa-comment"></i>
+                        <span>chat</span>
+                    </div>
+                    <div class = "main_button">
+                        <i class="fa fa-users"></i>
+                        <span>Participants</span>
+                    </div>
+                    <button class="button" (click)="screenShare()">Screen share</button>
+                </div>
+                <div class = "main_buttons">
+                    <div class = "main_button">
+                        <i class="fa fa-sign-out"></i>
+                        <span>Leave</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class = "right_section">
+            <div class = "main_header">
+                <h1>Chattt OP!!!</h1>
+            </div>
+            <div class = "chat_window">
+                <ul class = "messages">
+
+                </ul>
+            </div>
+            <div class = "input_message">
+                <input id = "message_ip" type="text" placeholder="Type text here..">
+            </div>
+        </div>
+    </div>
+    <script src = "/script.js"></script>
+</body>
+</html>
