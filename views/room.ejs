@@ -6,10 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teams</title>
     <link rel = "stylesheet" href = "style.css"> 
+    <script>
+        if(localStorage.getItem("username") == null){
+            var username = prompt("What is your name?");
+            localStorage.setItem("username", username)
+        }
+    </script>
     <script> 
         const room_id = "<%= room_id %>";
         console.log("room.ejs : room id is : " + room_id);
     </script>
+    <!-- <script src = "/user.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://use.fontawesome.com/da97708ad0.js"></script>
     <script src = "/socket.io/socket.io.js"></script>
@@ -53,6 +60,7 @@
                         <span>Participants</span>
                     </div>
                     <button class="button" (click)="screenShare()">Screen share</button>
+                    <button class="button" (click)="screenShare()">Invite</button>
                 </div>
                 <div class = "main_buttons">
                     <div class = "main_button">

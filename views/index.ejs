@@ -6,13 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src = "/user.js"></script>
 </head>
 <body>
-    <div class = "join_meeting">
-        <input type="text" placeholder="Enter Meeting link ..">
+    <div class = "join_create_meeting">
+        <input type="text" id = "meeting_link" placeholder="Enter Meeting link ..">
+        <br>
+        <input type="text" id = "Username" placeholder="Enter Username">
+        <br>
+        <button onclick = "check_link_validity(); update_user_name()">Join Meeting</button>
+        <br>
+        <button onclick = "create_meeting(); update_user_name()">Create Meeting</button>
+        <br>
+        <button onclick = "now_what()">Has the var been updates?</button>
     </div>
-    <a href = "#" id = "meeting_link" onclick = "confirm_meet_join()">Join Meeting</a>
-    <a href = "/video_call"> create meeting</a>
     <script src = "demo.js"></script>
     <script src = "index.js"></script>
 </body>

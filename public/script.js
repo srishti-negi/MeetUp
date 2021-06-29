@@ -2,12 +2,21 @@ let my_video_stream;
 console.log("script has entered the chat")
 const socket = io('/');
 const peers = {};
+// import { user_detail } from './user.js'
 
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '3030'
-    
+    port: '3030',
+    config: {
+        "iceServers": [
+            {'urls': 'stun:stun.l.google.com:19302'}, 
+            {'urls': 'stun:stun1.l.google.com:19302'},
+            {'urls': 'stun:stun2.l.google.com:19302'},
+            {'urls': 'stun:stun3.l.google.com:19302'},
+            {'urls': 'stun:stun4.l.google.com:19302'}
+        ]
+    }
 });
 
 var getUserMedia =
@@ -27,6 +36,7 @@ navigator.mediaDevices.getUserMedia({
     video: true, 
     audio: true
 }).then(stream => {
+    err => console.log(err)
     my_video_stream = stream;
     console.log("user1")
     console.log(stream)
@@ -45,7 +55,7 @@ navigator.mediaDevices.getUserMedia({
         })
     })
 
-    socket.on('user-connected', userId => {
+    socket.on('user-connected', (userId, username) => {
         // user is joining
         setTimeout(() => {
           // user joined
@@ -74,27 +84,39 @@ navigator.mediaDevices.getUserMedia({
         }
     })
       
-    socket.on('new_message', message => {
+    socket.on('new_message', (message , username)=> {
         console.log("message recieved from server " + message)
-        $('ul').append(`<li class = "messages"><b>user  </b> <br>${message} </li><br>`)
+        $('ul').append(`<li class = "messages"><b> ${username} </b> <br>${message} </li><br>`)
         bottom_scroll();
     })
       
 })
 
 socket.on('user-disconnected', userId => {
-    console.log("heard a close event broadcast" + peers[userId])
-    if (peers[userId]) {
-        peers[userId].close()
-        console.log("Closing connection")
-    }
+    setTimeout(() => {
+        // user joined
+        //what do you want to do?
+        console.log("heard a close event broadcast" + peers[userId])
+        if (peers[userId]) {
+            peers[userId].close()
+            console.log("Closing connection")
+        }
+      }, 1000)
 })
 
 console.log("script.js: " + room_id);
 
 peer.on('open', id => {
+    // var username = "user"
+    // myPagePromise.then(() => {
+    //      username = sessionStorage.getItem("username")
+    //     console.log("script.js session storage: " + username)
+    //   })
+    var username = localStorage.getItem("username")
+    // sessionStorage.clear();
     console.log("Peer id: " + id);
-    socket.emit('join-room', room_id, id);
+    console.log("sessionstorage val : " + username)
+    socket.emit('join-room', room_id, id, username);
 }) 
 
 const connect_to_new_user = (user_id, stream) => {

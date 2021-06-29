@@ -41,16 +41,18 @@ app.get('/video_call/:room', (req, res) => {
 }) 
 
 io.on('connection', socket => {
-    socket.on('join-room', (room_id, user_id) => {
-        console.log("Someone has joined the room!");
+    socket.on('join-room', (room_id, user_id, username) => {
+        console.log( "Someone has joined the room!");
         socket.join(room_id);  
         socket.broadcast.to(room_id).emit('user-connected', user_id);
+
         socket.on('message', message => {
-            io.to(room_id).emit('new_message', message) 
+            io.to(room_id).emit('new_message', message, username) 
         })
+
         socket.on('disconnect', () => {
             console.log("Broadcassting close event!")
-            socket.broadcast.to(room_id).emit('user-disconnected', user_id);
+            socket.broadcast.to(room_id).emit('user-disconnected', user_id, username);
         })
     })
     
