@@ -60,7 +60,7 @@ navigator.mediaDevices.getUserMedia({
         setTimeout(() => {
           // user joined
           connect_to_new_user(userId, stream)
-        }, 1000)
+        }, 4000)
       })
 
     // socket.on('user-disconnected', userId => {
