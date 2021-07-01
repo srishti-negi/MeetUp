@@ -16,6 +16,15 @@
         const room_id = "<%= room_id %>";
         console.log("room.ejs : room id is : " + room_id);
     </script>
+      <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- Nucleo Icons -->
+    <link href="/assets/css/nucleo-icons.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="/assets/css/blk-design-system.css?v=1.0.0" rel="stylesheet" />
+    <!-- CSS Just for demo purpose, don't include it in your project
+    <link href="./assets/demo/demo.css" rel="stylesheet" /> -->
     <!-- <script src = "/user.js"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://use.fontawesome.com/da97708ad0.js"></script>
@@ -26,12 +35,49 @@
     <script src="https://use.fontawesome.com/da97708ad0.js"></script>
 </head>
 <body>    
-    <div class = "main_section">
-        <div class = "left_section">
-            <div class = "header">
-                <h1>I hate errors!!!!!!!!!!!!!!!!!!!</h1>
+         <!-- Navbar -->         
+         <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="100">
+            <div class="container">
+              <div class="navbar-translate">
+                <a class="navbar-brand" href="https://enigmatic-garden-06751.herokuapp.com/" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
+                  <span>MeetUp</span> Meetings anytime
+                </a>
+                <!-- <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-bar bar1"></span>
+                  <span class="navbar-toggler-bar bar2"></span>
+                  <span class="navbar-toggler-bar bar3"></span>
+                </button> -->
+              </div>
+              <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                <div class="navbar-collapse-header">
+                  <div class="row">
+                    <div class="col-6 collapse-brand">
+                      <a>
+                        MeetUp
+                      </a>
+                    </div>
+                    <div class="col-6 collapse-close text-right">
+                      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="tim-icons icon-simple-remove"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
             </div>
+          </nav>
+          <!-- End Navbar -->
+
+    <div class = "main_section">
+      <!-- <img src="/assets/img/path1.png" class="section section-basic path" style="left: -999px; bottom: -99px"> -->
+        <div class = "left_section">
+            <!-- <div class = "header">
+                <h1>MeetUs</h1>
+            </div> -->
+                
             <div class = "main_video">
+
                 <center>
                 <div id = "video-grid">
 
@@ -41,38 +87,33 @@
             <div class = "main_controls">
                 <!-- <h1>toolbar here</h1> -->
                 <div class = "main_buttons">
-                    <div class = "main_button mute_button" onclick="toggle_mic()">
-                        <i class="fa fa-microphone"></i>
-                        <span>mute</span>
-                    </div>
-                    <div class = "main_button camera_button" onclick="toggle_camera()">
-                        <i class="fa fa-camera"></i>
-                        <span>video</span>
+                  <div class = "mute_button" onclick="toggle_mic()">
+                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+                      <i class="fa fa-microphone"></i> Mute
+                    </a>
+                  </div>
+                  <div class = "camera_button" onclick="toggle_camera()">
+                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+                      <i class="fa fa-camera"></i> Video On
+                    </a>
                     </div>
                 </div>
                 <div class = "main_buttons">
-                    <div class = "main_button">
-                        <i class="fa fa-comment"></i>
-                        <span>chat</span>
-                    </div>
-                    <div class = "main_button">
-                        <i class="fa fa-users"></i>
-                        <span>Participants</span>
-                    </div>
-                    <button class="button" (click)="screenShare()">Screen share</button>
-                    <button class="button" (click)="screenShare()">Invite</button>
-                </div>
-                <div class = "main_buttons">
-                    <div class = "main_button">
-                        <i class="fa fa-sign-out"></i>
-                        <span>Leave</span>
-                    </div>
+                  <div class = "invite" onclick = "copy_url()">
+                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+                      <i class="fa fa-users"></i> invite
+                    </a>
+                    <div id = "invite_alert"></div>
+                  </div>
+                  <a class="nav-link active" data-toggle="tab" href="https://enigmatic-garden-06751.herokuapp.com/meeting_end" role="tablist">
+                    <i class="fa fa-sign-out"></i> Leave
+                  </a>
                 </div>
             </div>
         </div>
         <div class = "right_section">
             <div class = "main_header">
-                <h1>Chattt OP!!!</h1>
+                <!-- <h1>Chattt OP!!!</h1> -->
             </div>
             <div class = "chat_window">
                 <ul class = "messages">
@@ -80,7 +121,7 @@
                 </ul>
             </div>
             <div class = "input_message">
-                <input id = "message_ip" type="text" placeholder="Type text here..">
+                <input class="form-control" id = "message_ip" type="text" placeholder="Type message here..">
             </div>
         </div>
     </div>

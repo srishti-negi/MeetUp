@@ -86,7 +86,7 @@ navigator.mediaDevices.getUserMedia({
       
     socket.on('new_message', (message , username)=> {
         console.log("message recieved from server " + message)
-        $('ul').append(`<li class = "messages"><b> ${username} </b> <br>${message} </li><br>`)
+        $('ul').append(`<li class = "blockquote blockquote-primary message"><b> ${username} </b><br>${message} </li>`)
         bottom_scroll();
     })
       
@@ -144,8 +144,10 @@ const addVideoStream = (video, stream) => {
 }
 
 const bottom_scroll = () => {
-    var window_componenet = $('chat_window');
-    window_componenet.scrollTop(window_componenet.prop("scroll_height"));
+    console.log("scroll chat to bottom!!")
+    var chat_window = $('chat_window');
+    console.log("scrolling elemnent " + chat_window);
+    chat_window.scrollBottom = chat_window.scrollHeight;
 }
 
 const toggle_mic = () => {
@@ -161,14 +163,20 @@ const toggle_mic = () => {
 }
 
 const set_mute = () => {
-    const html = `<i class="fa fa-microphone"></i>
-    <span>Mute</span>`
+    // const html = `<i class="fa fa-microphone"></i>
+    // <span>Mute</span>`
+    const html = `<a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    <i class="fa fa-microphone"></i> Mute
+  </a>`
     document.querySelector('.mute_button').innerHTML = html;
 }
 
 const set_unmute = () => {
-    const html = `<i class="fa fa-microphone-slash"></i>
-    <span>Unmute</span>`
+    // const html = `<i class="fa fa-microphone-slash"></i>
+    // <span>Unmute</span>`
+    const html = `<a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    <i class="fa fa-microphone-slash"></i> Unmute
+  </a>`
     document.querySelector('.mute_button').innerHTML = html;
 }
 
@@ -185,15 +193,30 @@ const toggle_camera = () => {
 }
 
 const set_camera_close = () => {
-    const html = `<i class="fa fa-stop"></i>
-    <span>video On</span>`
+    const html = ` <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    <i class="fa fa-camera"></i> Video On
+  </a>`
     document.querySelector('.camera_button').innerHTML = html;
 }
 
 const set_camera_open = () => {
-    const html = `<i class="fa fa-camera"></i>
-    <span>video off</span>`
+    const html = ` <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    <i class="fa fa-camera"></i> Video Off
+  </a>`
     document.querySelector('.camera_button').innerHTML = html;
 }
 
+const copy_url = () => {
+    navigator.clipboard.writeText(window.location.href);
+    console.log("invite link copied");
+    const alert_on_copy = `<div class="alert alert-primary alert-with-icon">
+    <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
+      <i class="tim-icons icon-simple-remove"></i>
+    </button>
+    <span data-notify="icon" class="tim-icons icon-coins"></span>
+    <span>
+    Invite Link Copied to Clipboard</span>
+  </div>`
+//   document.querySelector('#invite_alert').innerHTML = alert_on_copy;
+} 
 

@@ -40,6 +40,10 @@ app.get('/video_call/:room', (req, res) => {
     res.render('room', {room_id: req.params.room});
 }) 
 
+app.get('/meeting_end', (req, res) =>  {
+    res.render('end');
+})
+
 io.on('connection', socket => {
     socket.on('join-room', (room_id, user_id, username) => {
         console.log( "Someone has joined the room!");

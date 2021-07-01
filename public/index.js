@@ -22,13 +22,19 @@ function now_what() {
 console.log("Outside func : " + sessionStorage.getItem("username"))
 
 function create_meeting() {
-    if (confirm("Do you want to start a meeting?")) {
+    if($('#Username').val().trim() == null || $('#Username').val().trim() == "") {
+        alert("Please enter your username");
+    }
+    else if (confirm("Do you want to start a meeting?")) {
         window.open("/video_call")
     } 
 }
 
 function confirm_meet_join() {
-    if (confirm("Do you want to join the meeting?")) {
+    if($('#Username').val().trim() == null || $('#Username').val().trim() == "") {
+        alert("Please enter your username");
+    }
+    else if (confirm("Do you want to join the meeting?")) {
         console.log("redirecting to: " + meeting_link.val())
         window.open(meeting_link.val())
     } 
@@ -36,7 +42,7 @@ function confirm_meet_join() {
 
 function check_link_validity() {
     const str = meeting_link.val();
-    const url_start = "http://localhost:3030/video_call/";
+    const url_start = "https://enigmatic-garden-06751.herokuapp.com/video_call/";
     const len = url_start.length;
     console.log(meeting_link.val());
     if (str.substr(0, len) == url_start) {
