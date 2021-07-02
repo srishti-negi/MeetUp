@@ -14476,6 +14476,9 @@ p.description {
 .blockquote.blockquote-primary {
   border-color: #e14eca;
   color: #e14eca;
+  border-color: #92a1b0;
+  color: #e3e3dd;
+  border-radius: 0.9em;
 }
 
 .blockquote.blockquote-primary small {

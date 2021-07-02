@@ -4,6 +4,9 @@ const socket = io('/');
 const peers = {};
 // import { user_detail } from './user.js'
 
+var start_d = new Date();
+const meeting_start_time = start_d.getTime();
+
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
@@ -85,8 +88,10 @@ navigator.mediaDevices.getUserMedia({
     })
       
     socket.on('new_message', (message , username)=> {
-        console.log("message recieved from server " + message)
-        $('ul').append(`<li class = "blockquote blockquote-primary message"><b> ${username} </b><br>${message} </li>`)
+        var d = new Date();
+        var curr_time =  d.toLocaleTimeString();
+        console.log("message recieved from server at time: " + curr_time)
+        $('ul').append(`<li class = "blockquote blockquote-primary message"><span class = "message_info"><b> ${username} </b> &emsp; ${curr_time}</span><br>${message} </li>`)
         bottom_scroll();
     })
       
@@ -101,7 +106,7 @@ socket.on('user-disconnected', userId => {
             peers[userId].close()
             console.log("Closing connection")
         }
-      }, 1000)
+      }, 2000)
 })
 
 console.log("script.js: " + room_id);
@@ -209,6 +214,7 @@ const set_camera_open = () => {
 const copy_url = () => {
     navigator.clipboard.writeText(window.location.href);
     console.log("invite link copied");
+    alert("Meeting link has been copied to clipboard!")
     const alert_on_copy = `<div class="alert alert-primary alert-with-icon">
     <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
       <i class="tim-icons icon-simple-remove"></i>
@@ -220,3 +226,22 @@ const copy_url = () => {
 //   document.querySelector('#invite_alert').innerHTML = alert_on_copy;
 } 
 
+var minutesLabel = document.getElementById("minutes");
+var secondsLabel = document.getElementById("seconds");
+var totalSeconds = 0;
+setInterval(setTime, 1000);
+
+function setTime() {
+  ++totalSeconds;
+  secondsLabel.innerHTML = pad(totalSeconds % 60);
+  minutesLabel.innerHTML = pad(parseInt(totalSeconds / 60));
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}

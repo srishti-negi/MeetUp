@@ -122,6 +122,7 @@ body{
 }
 
 
+
 /* .path {
     position: absolute;
     opacity: .02;
@@ -142,4 +143,23 @@ img, svg {
 
 .section-basic img.path {
     right: -400px;
+}
+
+.message_info {
+    color: #fdfdfd;
+}
+
+video:first-child:nth-last-child(1) {
+    /* -or- li:only-child { */
+        width: 50%;
+}
+
+video:first-child:nth-last-child(2),
+video:first-child:nth-last-child(2) ~ video {
+    width: 40%;
+}
+
+video:first-child:nth-last-child(3),
+video:first-child:nth-last-child(3) ~ video {
+    width: 29%;
 }
