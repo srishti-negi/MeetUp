@@ -93,7 +93,16 @@ body{
     display: flex;
     background-color: black;
 } */
+#chat {
+    transition: all 2s ease;
+}
 
+#participants{
+    padding-top: 5%;
+    overflow-y: scroll;
+    flex-grow: 1;
+    background-color: #3d3e7a;
+}
 .chat_window{
     padding-top: 10%;
     overflow-y: scroll;
@@ -162,4 +171,17 @@ video:first-child:nth-last-child(2) ~ video {
 video:first-child:nth-last-child(3),
 video:first-child:nth-last-child(3) ~ video {
     width: 29%;
+}
+
+#participants_heading {
+    position: absolute;
+}
+
+.participants_box{
+    padding-top: 4%;
+    position: absolute;
+}
+
+.users{
+    list-style: none;
 }

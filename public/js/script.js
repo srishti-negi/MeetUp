@@ -1,8 +1,10 @@
 let my_video_stream;
 console.log("script has entered the chat")
+var peers = {};
+var calls = []
 const socket = io('/');
-const peers = {};
-// import { user_detail } from './user.js'
+update_users_list();
+var user_list = [];
 
 var start_d = new Date();
 const meeting_start_time = start_d.getTime();
@@ -10,7 +12,7 @@ const meeting_start_time = start_d.getTime();
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '443',
+    port: '3030',
     config: {
         "iceServers": [
             {'urls': 'stun:stun.l.google.com:19302'}, 
@@ -33,7 +35,7 @@ const my_video = document.createElement('video');
 my_video.muted = true;
 
 const video_grid = document.getElementById('video-grid');
-console.log(video_grid);
+// console.log(video_grid);
 
 navigator.mediaDevices.getUserMedia({
     video: true, 
@@ -41,20 +43,19 @@ navigator.mediaDevices.getUserMedia({
 }).then(stream => {
     err => console.log(err)
     my_video_stream = stream;
-    console.log("user1")
-    console.log(stream)
-    addVideoStream(my_video, stream);
-
-    console.log("user2b");
-    console.log(stream)
+   
+    addVideoStream(my_video, stream, peer.id);
 
     peer.on('call', call => {
+        console.log("promise call: " + peer.id)
+        console.log("cal: " + call.peer)
+        // for(i in call)
+        //     console.log(i + " " + JSON.stringify(call[i]));
+        calls.push(call)
         call.answer(stream);
-        console.log("user2b")
         const video = document.createElement('video');
         call.on('stream', user_video_stream => {
-            console.log("user2b")
-            addVideoStream(video, user_video_stream);
+            addVideoStream(video, user_video_stream, call.peer);
         })
     })
 
@@ -62,27 +63,20 @@ navigator.mediaDevices.getUserMedia({
         // user is joining
         setTimeout(() => {
           // user joined
-          connect_to_new_user(userId, stream)
+          connect_to_new_user(userId, stream);
         }, 4000)
+        
       })
 
-    // socket.on('user-disconnected', userId => {
-    //     console.log("heard a close event broadcast")
-    //     if (peers[userId]) {
-    //         peers[userId].close()
-    //         console.log("Closing connection")
-    //     }
-    //   })
-
     let chat_input = $('input')
-    console.log(chat_input)
+    // console.log(chat_input)
       
     //enter key = 13
     $('html').keydown((key_pressed) => {
       
         if(key_pressed.which == 13 && chat_input.val().length > 0) {
             socket.emit('message', chat_input.val());
-            console.log(chat_input.val());
+            // console.log(chat_input.val());
             chat_input.val("");
         }
     })
@@ -90,57 +84,86 @@ navigator.mediaDevices.getUserMedia({
     socket.on('new_message', (message , username)=> {
         var d = new Date();
         var curr_time =  d.toLocaleTimeString();
-        console.log("message recieved from server at time: " + curr_time)
-        $('ul').append(`<li class = "blockquote blockquote-primary message"><span class = "message_info"><b> ${username} </b> &emsp; ${curr_time}</span><br>${message} </li>`)
-        bottom_scroll();
+        // console.log("message recieved from server at time: " + curr_time)
+        $('.messages').append(`<li class = "blockquote blockquote-primary message"><span class = "message_info"><b> ${username} </b> &emsp; ${curr_time}</span><br>${message} </li>`)
+        // bottom_scroll();
     })
+
+    // socket.on('roomData', (room, users) => {
+    //     console.log("### Listening to room data" + typeof users);
+    //     // user_list.push(users);
+    //     user_list = users
+    //     console.log("work..." + typeof user_list);
+    //     for(i in user_list)
+    //         console.log("## server.js roomData : " + i +" : " + user_list[i].name);
+    //     update_users_list();
+    // })
       
 })
 
-socket.on('user-disconnected', userId => {
+socket.on('roomData', (room, users) => {
+    console.log("### Listening to room data" + typeof users);
+    // user_list.push(users);
+    user_list = users
+    // console.log("work..." + typeof user_list);
+    // for(i in user_list)
+        // console.log("## server.js roomData : " + i +" : " + user_list[i].name);
+    update_users_list();
+})
+
+socket.on('user-disconnected', (userId, username) => {
     setTimeout(() => {
-        // user joined
-        //what do you want to do?
-        console.log("heard a close event broadcast" + peers[userId])
-        if (peers[userId]) {
-            peers[userId].close()
-            console.log("Closing connection")
-        }
+        console.log("heard a close event broadcast" + userId)
+        console.log( "video html " + $(userId))
+        // for(p in peer.connections)
+        // console.log(p)
+        // handlePeerDisconnect();
+        var v_id = "#" + peer.id
+        var vid = document.getElementById(userId)
+        vid.remove();
+        // if (peers[userId]) {
+        //     peers[userId].close()
+        //     console.log("Closing connection")
+        //     update_users_list();
+        // }
       }, 2000)
 })
 
-console.log("script.js: " + room_id);
+// console.log("script.js: " + room_id);
 
 peer.on('open', id => {
-    // var username = "user"
-    // myPagePromise.then(() => {
-    //      username = sessionStorage.getItem("username")
-    //     console.log("script.js session storage: " + username)
-    //   })
     var username = localStorage.getItem("username")
-    // sessionStorage.clear();
+    console.log("#open")
     console.log("Peer id: " + id);
+    // my_video.setAttribute("id", id)
+    update_users_list();
     console.log("sessionstorage val : " + username)
     socket.emit('join-room', room_id, id, username);
 }) 
 
 const connect_to_new_user = (user_id, stream) => {
+    console.log("connect_to_new_user: " + user_id)
     const call = peer.call(user_id, stream);
     const video = document.createElement('video');
     call.on('stream', user_video_stream => {
-        addVideoStream(video, user_video_stream);
+        addVideoStream(video, user_video_stream, user_id);
     })
     call.on('close', () => {
+        console.log("call close event!!")
+        // handlePeerDisconnect();
         video.remove()
     })
     peers[user_id] = call;
     console.log("new peer: " + peer);
     console.log("new user is here :)");
     console.log("peers[userid] " + peers[user_id])
+    update_users_list();
 }
 
-const addVideoStream = (video, stream) => {
+const addVideoStream = (video, stream, user_id) => {
     video.srcObject = stream;
+    video.setAttribute("id", user_id)
+    video.setAttribute("class", user_id)
     video.addEventListener('loadedmetadata', () => {
         video.play();
     }) 
@@ -213,7 +236,7 @@ const set_camera_open = () => {
 
 const copy_url = () => {
     navigator.clipboard.writeText(window.location.href);
-    console.log("invite link copied");
+    // console.log("invite link copied");
     alert("Meeting link has been copied to clipboard!")
     const alert_on_copy = `<div class="alert alert-primary alert-with-icon">
     <button type="button" aria-hidden="true" class="close" data-dismiss="alert" aria-label="Close">
@@ -244,4 +267,20 @@ function pad(val) {
   } else {
     return valString;
   }
+}
+
+function update_users_list() {
+    let users = $('.users');
+    var num_users = 0;
+    users.empty();
+    for(i in user_list) {
+        users.append("<li class =" + user_list[i].id  + " >" + user_list[i].name + "</li>");
+        num_users++;
+    }
+    let user_heading = $('#participants_heading')
+    user_heading.empty();
+    var num_str = num_users.toString();
+    var new_heading = "<h3>Participants: " + num_str + "</h3>";
+    console.log("new heading: " + new_heading)
+    user_heading.append(new_heading)
 }
