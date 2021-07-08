@@ -49,8 +49,7 @@ navigator.mediaDevices.getUserMedia({
     peer.on('call', call => {
         console.log("promise call: " + peer.id)
         console.log("cal: " + call.peer)
-        // for(i in call)
-        //     console.log(i + " " + JSON.stringify(call[i]));
+        peers[call.peer] = call;
         calls.push(call)
         call.answer(stream);
         const video = document.createElement('video');
@@ -121,18 +120,19 @@ socket.on('user-disconnected', (userId, username) => {
         var v_id = "#" + peer.id
         var vid = document.getElementById(userId)
         vid.remove();
-        // if (peers[userId]) {
-        //     peers[userId].close()
-        //     console.log("Closing connection")
-        //     update_users_list();
-        // }
+        if (peers[userId]) {
+            peers[userId].close()
+            console.log("Closing connection")
+            update_users_list();
+        }
       }, 2000)
 })
 
 // console.log("script.js: " + room_id);
 
 peer.on('open', id => {
-    var username = localStorage.getItem("username")
+    // var username = localStorage.getItem("username")
+    var username = my_user_name;
     console.log("#open")
     console.log("Peer id: " + id);
     // my_video.setAttribute("id", id)
@@ -163,7 +163,7 @@ const connect_to_new_user = (user_id, stream) => {
 const addVideoStream = (video, stream, user_id) => {
     video.srcObject = stream;
     video.setAttribute("id", user_id)
-    video.setAttribute("class", user_id)
+    // video.setAttribute("class", user_id)
     video.addEventListener('loadedmetadata', () => {
         video.play();
     }) 
@@ -193,7 +193,7 @@ const toggle_mic = () => {
 const set_mute = () => {
     // const html = `<i class="fa fa-microphone"></i>
     // <span>Mute</span>`
-    const html = `<a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    const html = `<a class="nav-link active btn" data-toggle="tab" href="#link1" role="tablist">
     <i class="fa fa-microphone"></i> Mute
   </a>`
     document.querySelector('.mute_button').innerHTML = html;
@@ -202,7 +202,7 @@ const set_mute = () => {
 const set_unmute = () => {
     // const html = `<i class="fa fa-microphone-slash"></i>
     // <span>Unmute</span>`
-    const html = `<a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    const html = `<a class="nav-link active btn" data-toggle="tab" href="#link1" role="tablist">
     <i class="fa fa-microphone-slash"></i> Unmute
   </a>`
     document.querySelector('.mute_button').innerHTML = html;
@@ -221,14 +221,14 @@ const toggle_camera = () => {
 }
 
 const set_camera_close = () => {
-    const html = ` <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    const html = ` <a class="nav-link active btn" data-toggle="tab" href="#link1" role="tablist">
     <i class="fa fa-camera"></i> Video On
   </a>`
     document.querySelector('.camera_button').innerHTML = html;
 }
 
 const set_camera_open = () => {
-    const html = ` <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+    const html = ` <a class="nav-link active btn" data-toggle="tab" href="#link1" role="tablist">
     <i class="fa fa-camera"></i> Video Off
   </a>`
     document.querySelector('.camera_button').innerHTML = html;

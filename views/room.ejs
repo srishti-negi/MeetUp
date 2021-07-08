@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teams</title>
     <link rel = "stylesheet" href = "style.css"> 
-    <script>
-        if(localStorage.getItem("username") == null){
-            var username = prompt("What is your name?");
-            localStorage.setItem("username", username)
-        }
-    </script>
+    <% if (name) { %>
+      <script>
+         var my_user_name = "<%= name %>";   
+         console.log("name: " + my_user_name)         
+      </script>
+    <% } %>
     <script> 
         const room_id = "<%= room_id %>";
         console.log("room.ejs : room id is : " + room_id);
@@ -39,15 +39,10 @@
          <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="100">
             <div class="container">
               <div class="navbar-translate">
-                <a class="navbar-brand" href="https://gorgeous-great-basin-23038.herokuapp.com/" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
+                <a class="navbar-brand" href="/" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
                   <span>MeetUp</span> Meetings anytime
                 </a>
-                <button class="btn" style = "display: flex;"><label id="minutes">00</label>:<label id="seconds">00</label></button>
-                <!-- <button class="navbar-toggler navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-bar bar1"></span>
-                  <span class="navbar-toggler-bar bar2"></span>
-                  <span class="navbar-toggler-bar bar3"></span>
-                </button> -->
+                <button class="btn btn-info" style = "display: flex;"><label id="minutes">00</label>:<label id="seconds">00</label></button>
               </div>
               <div class="collapse navbar-collapse justify-content-end" id="navigation">
                 <div class="navbar-collapse-header">
@@ -56,7 +51,6 @@
                       <a>
                         MeetUp
                       </a>
-
                     </div>
                     <div class="col-6 collapse-close text-right">
                       <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,12 +66,8 @@
           <!-- End Navbar -->
 
     <div class = "main_section">
-      <!-- <img src="/assets/img/path1.png" class="section section-basic path" style="left: -999px; bottom: -99px"> -->
         <div class = "left_section" id = "left_portion">
-            <!-- <div class = "header">
-                <h1>MeetUs</h1>
-            </div> -->
-                
+           
             <div class = "main_video">
 
                 <center>
@@ -90,32 +80,31 @@
                 <!-- <h1>toolbar here</h1> -->
                 <div class = "main_buttons">
                   <div class = "mute_button" onclick="toggle_mic()">
-                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+                    <a class="nav-link active btn" data-toggle="tab" href="#link1" role="tablist">
                       <i class="fa fa-microphone"></i> Mute
                     </a>
                   </div>
                   <div class = "camera_button" onclick="toggle_camera()">
-                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+                    <a class="nav-link active  btn" data-toggle="tab" href="#link1" role="tablist">
                       <i class="fa fa-camera"></i> Video On
                     </a>
                     </div>
-                    <a class="nav-link active" data-toggle="tab" href="#link1" onclick = "toggle_user_list()" role="tablist">
+                    <div class = "invite" onclick = "copy_url()">
+                      <a class="nav-link active  btn" data-toggle="tab" href="#link1" role="tablist">
+                        <i class="fa fa-users"></i> invite
+                      </a>
+                      <div id = "invite_alert"></div>
+                    </div>
+                    <a class="nav-link active  btn" data-toggle="tab" href="#link1" onclick = "toggle_chat()" role="tablist">
+                      <i class="fa fa-comments"></i> Chat
+                    </a>
+                    <a class="nav-link active  btn" data-toggle="tab" href="#link1" onclick = "toggle_user_list()" role="tablist">
                       <i class="fa fa-comments"></i> Participants
                     </a>
-                </div>
-                <div class = "main_buttons">
-                  <div class = "invite" onclick = "copy_url()">
-                    <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
-                      <i class="fa fa-users"></i> invite
+                    <a class="nav-link active  btn btn-warning" data-toggle="tab" href="/meeting_end" role="tablist">
+                      <i class="fa fa-sign-out"></i> Leave
                     </a>
-                    <div id = "invite_alert"></div>
-                  </div>
-                  <a class="nav-link active" data-toggle="tab" href="https://gorgeous-great-basin-23038.herokuapp.com/meeting_end" role="tablist">
-                    <i class="fa fa-sign-out"></i> Leave
-                  </a>
-                  <a class="nav-link active" data-toggle="tab" href="#link1" onclick = "toggle_chat()" role="tablist">
-                    <i class="fa fa-comments"></i> Chat
-                  </a>
+                  
                 </div>
             </div>
         </div>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatroom</title>
+    <script>
+         const username = "<%= name %>";   
+         const room_id = "<%= room_id %>";
+         console.log("name: " + username)         
+    </script>
+      <!--     Fonts and icons     -->
+    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+    <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+    <!-- Nucleo Icons -->
+    <link href="/assets/css/nucleo-icons.css" rel="stylesheet" />
+    <!-- CSS Files -->
+    <link href="/assets/css/blk-design-system.css?v=1.0.0" rel="stylesheet" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://use.fontawesome.com/da97708ad0.js"></script>
+    <script src = "/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+    <link rel="stylesheet" href="/css/chatroom.css">
+    <!-- <link rel="stylesheet" href="/vendor/fontawesome-free/css/fontawesome.min.css"> -->
+    <script src="https://use.fontawesome.com/da97708ad0.js"></script>
+</head>
+<body>    
+         <!-- Navbar -->         
+         <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="100" style="background: #1e2e76 !important">
+            <div class="container">
+              <div class="navbar-translate">
+                <a class="navbar-brand" href="/" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom" target="_blank">
+                  <span>MeetUp</span> Meetings anytime
+                </a>
+              </div>
+              <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                <div class="navbar-collapse-header">
+                  <div class="row">
+                    <div class="col-6 collapse-brand">
+                      <a>
+                        MeetUp
+                      </a>
+                    </div>
+                    <div class="col-6 collapse-close text-right">
+                      <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="tim-icons icon-simple-remove"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </nav>
+          <!-- End Navbar -->
+
+    <div class = "main_section" style="background-color: #171941">
+      <div id = "participants">
+        <div id = "participants_heading">
+        <h2 id = "user_box_heading">Participants </h2>
+        </div>
+        <br>
+        <div class= "participants_box">
+          <a class="nav-link active" data-toggle="tab" href="#link1" role="tablist">
+            <i class="fa fa-comments"></i> Participants
+          </a>
+          <ul class = "users">
+          </ul>
+        </div>
+      </div>
+        <div class = "left_section" id = "left_portion">
+          <div class = "chat_window" >
+            <ul class = "messages">
+
+            </ul>
+          </div>
+          <div class = "input_message">
+              <input class="form-control" id = "message_ip" type="text" placeholder="Type message here..">
+          </div>
+        </div>
+    </div>
+    <script src = "/js/room_toolbar_controls.js"></script>
+    <script src = "/js/chatroom.js"></script>
+</body>
+</html>
