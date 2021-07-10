@@ -83,28 +83,22 @@ app.post('/register',async (req, res) => {
             password: encrypted_pwd,
         })
         console.log(user)
-        User.findOne({email: req.query.email}, function(err, user){
-            if(err) {
-              console.log(err);
-            }
-            var message;
-            if(user) {
-              console.log(user)
-                message = "user exists";
-                console.log(message)
-                res.redirect('/register')
-            } else {
-                message= "user doesn't exist";
-                console.log(message)
-            }
-        })
-        user.save()
-                .then((result) => {
-                    res.redirect('/login');
-                })
-                .catch((err) => {
-                    console.log(err);
-        })
+        const result = await User.findOne({email: req.body.email}).select("email").lean();
+        console.log("result: " + req.query.email +  result)
+        if(result) {
+            console.log("user exists!")
+            res.redirect('/register')
+        }
+        else {
+            console.log("user does not exist!")
+            user.save()
+                    .then((result) => {
+                        res.redirect('/login');
+                    })
+                    .catch((err) => {
+                        console.log(err);
+            })
+        }
     }
     catch {
         res.redirect('/register')
