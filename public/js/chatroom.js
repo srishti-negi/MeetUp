@@ -1,20 +1,23 @@
 const socket = io('/');
 socket.emit('join-chatroom', room_id, username, email);
-
 var user_list = [];
 
 let chat_input = $('#message_ip')
   
 $('html').keydown((key_pressed) => {
     if(key_pressed.which == 13 && chat_input.val().length > 0) {
-        socket.emit('chat_only_message', chat_input.val());
+        var d = new Date();
+        var curr_time =  d.toLocaleTimeString();
+        socket.emit('chat_only_message', chat_input.val(), curr_time);
         chat_input.val("");
     }
 })
 
 const get_message_input = () => {
     if(chat_input.val().length > 0) {
-        socket.emit('chat_only_message', chat_input.val());
+        var d = new Date();
+        var curr_time =  d.toLocaleTimeString();
+        socket.emit('chat_only_message', chat_input.val(), curr_time);
         chat_input.val("");
     }
 }

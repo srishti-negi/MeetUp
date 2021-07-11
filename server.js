@@ -194,18 +194,19 @@ io.on('connection', socket => {
         })
 
 
-        socket.on('message', message => {
-            var d = new Date();
-            var curr_time =  d.toLocaleTimeString();
+        socket.on('message', async (message, curr_time) => {
             const html_li = `<li class = "blockquote blockquote-primary message"><span class = "message_info"><b> ${username} </b> &emsp; ${curr_time}</span><br>${message} </li>`
-            Chat.updateOne({date_chat_id: "Meeting" + today + room_id},  { $addToSet: {content: html_li }}, function(err, result) {
-                if (err){
-                  console.log(err);
-                }
-                else{
-                  console.log("chat updated!");
-                }
-            });
+            const result = await Chat.findOne({date_chat_id: "Meeting" + today + room_id}).select("_id").lean();
+            if (result){
+                Chat.updateOne({date_chat_id: "Meeting" + today + room_id},  { $addToSet: {content: html_li }}, function(err, result) {
+                    if (err){
+                    console.log(err);
+                    }
+                    else{
+                    console.log("chat updated!");
+                    }
+                });
+            }
             io.to(room_id).emit('new_message', message, username) 
         })
 
@@ -285,9 +286,7 @@ io.on('connection', socket => {
 
         socket.join(room_id);  
         
-        socket.on('chat_only_message', message => {
-            var d = new Date();
-            var curr_time =  d.toLocaleTimeString();
+        socket.on('chat_only_message', (message, curr_time) => {
             const html_li = `<li class = "text-white mb-3 message"><span class = "message_info"><b> ${username} </b> &emsp; ${curr_time}</span><br>${message} </li>`
             Chat.updateOne({date_chat_id: today + room_id},  { $addToSet: {content: html_li }}, function(err, result) {
                 if (err)

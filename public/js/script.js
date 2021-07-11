@@ -74,7 +74,9 @@ navigator.mediaDevices.getUserMedia({
     $('html').keydown((key_pressed) => {
       
         if(key_pressed.which == 13 && chat_input.val().length > 0) {
-            socket.emit('message', chat_input.val());
+            var d = new Date();
+            var curr_time =  d.toLocaleTimeString();
+            socket.emit('message', chat_input.val(), curr_time);
             // console.log(chat_input.val());
             chat_input.val("");
         }
