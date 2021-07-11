@@ -162,6 +162,7 @@ io.on('connection', socket => {
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         today = dd + "/" + mm + "/" + yyyy;
+        
 
         const new_chat = new Chat(
             {   date_chat_id: "Meeting" + today + room_id,
@@ -278,7 +279,7 @@ io.on('connection', socket => {
               console.log(err);
             }
             else{
-              console.log("User chatrooms updated");
+              console.log("User chatrooms updateOne: " + email + room_id);
             }
         });
 

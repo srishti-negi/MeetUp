@@ -1,5 +1,5 @@
 const socket = io('/');
-socket.emit('join-chatroom', room_id, username);
+socket.emit('join-chatroom', room_id, username, email);
 
 var user_list = [];
 

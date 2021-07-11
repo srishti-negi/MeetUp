@@ -91,11 +91,11 @@
           <br>
           <% chat_history.forEach(function(chat) { %>
             <div class="container">
-            <h2 class="title" style="background-color: #00bf9a; padding: 1rem;">
-              <% var c  = chat.date_chat_id.substring(0, 10) %>
-              <% if (chat.date_chat_id.substring(0, 7) == "Meeting") {c =  "Meeting: " + chat.date_chat_id.substring(8, 18);} %>
-              <%-c%>
-            </h2>
+              <h2 class="title" style="background-color: #00bf9a; padding: 1rem;">
+                <% var c  = chat.date_chat_id.substring(0, 10) %>
+                <% if (chat.date_chat_id.substring(0, 7) == "Meeting") {c =  "Meeting: " + chat.date_chat_id.substring(7, 17);} %>
+                <%-c%>
+              </h2>
             <div class = "left_section card" id = "left_portion" style = "background-color: #1f2251ad;">
             <div class = "chat_window" >
               <ul class = "messages_stored" style="list-style: none;">

@@ -9,7 +9,8 @@ room_list.empty();
 // }
 var i = 0;
 my_rooms.forEach(r => {
-    room_list.append(`<li><a href = "/chatroom/${r}"> Team ${i}</li>`);
+    if(r.length > 0)
+        room_list.append(`<li><a href = "/chatroom/${r}"> Team ${i}</li>`);
     i++;
 })
 
