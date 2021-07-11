@@ -33,7 +33,7 @@ function confirm_room_join() {
 
 function check_room_link_validity() {
     const room_str = room_link.val();
-    const room_url_start = "http://localhost:3030/chatroom/";
+    const room_url_start = "https://gorgeous-great-basin-23038.herokuapp.com/chatroom/";
     const url_len = room_url_start.length;
     if (room_str.substr(0, url_len) == room_url_start) {
         confirm_room_join()
@@ -52,7 +52,7 @@ function confirm_meet_join() {
 
 function check_link_validity() {
     const str = meeting_link.val();
-    const url_start = "http://localhost:3030/video_call/";
+    const url_start = "https://gorgeous-great-basin-23038.herokuapp.com/video_call/";
     const len = url_start.length;
     console.log(meeting_link.val());
     if (str.substr(0, len) == url_start) {

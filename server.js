@@ -147,7 +147,7 @@ app.get('/meeting_end', (req, res) =>  {
 })
 
 io.on('connection', socket => {
-    socket.on('join-room', (room_id, user_id, username) => {
+    socket.on('join-room', async (room_id, user_id, username) => {
         
         socket.join(room_id);  
         const { error, user } = addUser({ id: user_id, name: username, room: room_id }); 
@@ -157,7 +157,54 @@ io.on('connection', socket => {
 
         io.to(room_id).emit('roomData', room = room_id, users = getUsersInRoom(room_id));
 
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = dd + "/" + mm + "/" + yyyy;
+
+        const new_chat = new Chat(
+            {   date_chat_id: "Meeting" + today + room_id,
+                chatroom_id: room_id,
+                chat_in_meeting: true,
+                content: ""
+            }
+        )
+
+        Chat.findOne({ date_chat_id: "Meeting" + today + room_id}, function(err, chat){
+            if(err) {
+              console.log(err);
+            }
+            var message;
+            if(chat) {
+                message = "chat exists";
+                console.log(message)
+            } else {
+                message= "chat doesn't exist";
+                console.log(message)
+                new_chat.save()
+                .then((result) => {
+                    console.log("chat saved ")
+                })
+                .catch((err) => {
+                    console.log(err);
+        })
+            }
+        })
+
+
         socket.on('message', message => {
+            var d = new Date();
+            var curr_time =  d.toLocaleTimeString();
+            const html_li = `<li class = "blockquote blockquote-primary message"><span class = "message_info"><b> ${username} </b> &emsp; ${curr_time}</span><br>${message} </li>`
+            Chat.updateOne({date_chat_id: "Meeting" + today + room_id},  { $addToSet: {content: html_li }}, function(err, result) {
+                if (err){
+                  console.log(err);
+                }
+                else{
+                  console.log("chat updated!");
+                }
+            });
             io.to(room_id).emit('new_message', message, username) 
         })
 
@@ -236,6 +283,7 @@ io.on('connection', socket => {
         });
 
         socket.join(room_id);  
+        
         socket.on('chat_only_message', message => {
             var d = new Date();
             var curr_time =  d.toLocaleTimeString();

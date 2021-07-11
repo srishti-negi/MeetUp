@@ -75,8 +75,10 @@
         <a class="btn side_bar_btn" href="#link1" onclick="copy_url()">
           <i class="fa fa-users"></i> invite
         </a>
+        <a href = "/" class = "btn btn-warning side_bar_btn" id = "meeting_link" >Leave Room</a>
         <div class = "list_participants">
-          <h2>Users</h2>
+         
+          </ul>
         </div>
         </div>
 
@@ -89,7 +91,11 @@
           <br>
           <% chat_history.forEach(function(chat) { %>
             <div class="container">
-            <h2 class="title" style="background-color: #00bf9a; padding: 1rem;"><%= chat.date_chat_id.substring(0, 10)%></h2>
+            <h2 class="title" style="background-color: #00bf9a; padding: 1rem;">
+              <% var c  = chat.date_chat_id.substring(0, 10) %>
+              <% if (chat.date_chat_id.substring(0, 7) == "Meeting") {c =  "Meeting: " + chat.date_chat_id.substring(8, 18);} %>
+              <%-c%>
+            </h2>
             <div class = "left_section card" id = "left_portion" style = "background-color: #1f2251ad;">
             <div class = "chat_window" >
               <ul class = "messages_stored" style="list-style: none;">
