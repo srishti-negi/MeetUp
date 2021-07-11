@@ -12,7 +12,7 @@ const meeting_start_time = start_d.getTime();
 var peer = new Peer(undefined, {
     path: '/peerjs',
     host: '/',
-    port: '3030',
+    port: '443',
     config: {
         "iceServers": [
             {'urls': 'stun:stun.l.google.com:19302'}, 
