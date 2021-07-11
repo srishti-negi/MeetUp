@@ -7,13 +7,8 @@
   <link rel="apple-touch-icon" sizes="76x76" href="/assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
   <title>
-    Blk• Design System by Creative Tim
+    MeetUp
   </title>
-  <script>
-    const username = "<%= name %>";   
-    const room_id = "<%= room_id %>";
-    console.log("name: " + username);   
-  </script>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
@@ -26,14 +21,25 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://use.fontawesome.com/da97708ad0.js"></script>
   <script src = "/socket.io/socket.io.js"></script>
-  <!-- <link rel="stylesheet" href="/css/chatroom.css"> -->
+  <link rel="stylesheet" href="/css/chatroom.css">
   <!-- <link rel="stylesheet" href="/vendor/fontawesome-free/css/fontawesome.min.css"> -->
   <script src="https://use.fontawesome.com/da97708ad0.js"></script>
+  <script>
+    const username = "<%= name %>";   
+    const room_id = "<%= room_id %>";
+    const email = "<%= email %>";
+    const meeeting_link = "/video_call/" + room_id;
+
+    const copy_url = () => {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Meeting link has been copied to clipboard!");
+    }
+   </script>
 </head>
 
 <body class="index-page" style="background-color: #191d4f;">
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="100">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-transparent " color-on-scroll="#3d3e7a">
       <div class="container">
         <div class="navbar-translate">
           <a class="navbar-brand" rel="tooltip" href = "/" data-placement="bottom" target="_blank" style = "color: #ffffff;">
@@ -63,7 +69,17 @@
     </nav>
     <!-- End Navbar -->
     <div class="wrapper">
-      
+
+      <div class = "side_bar">
+        <a href = "/" class = "btn btn-info side_bar_btn" id = "meeting_link" >Video Call</a>
+        <a class="btn side_bar_btn" href="#link1" onclick="copy_url()">
+          <i class="fa fa-users"></i> invite
+        </a>
+        <div class = "list_participants">
+          <h2>Users</h2>
+        </div>
+        </div>
+
       <div class = "main">
         <div class = "section section-basic" id = "basic-elements">
 
@@ -73,11 +89,13 @@
           <br>
           <% chat_history.forEach(function(chat) { %>
             <div class="container">
-            <h2 class="title"><%= chat.date_chat_id.substring(0, 10)%></h2>
+            <h2 class="title" style="background-color: #00bf9a; padding: 1rem;"><%= chat.date_chat_id.substring(0, 10)%></h2>
             <div class = "left_section card" id = "left_portion" style = "background-color: #1f2251ad;">
             <div class = "chat_window" >
-              <ul class = "messages" style="list-style: none;">
-              <%- chat.content%>
+              <ul class = "messages_stored" style="list-style: none;">
+                <% chat.content.forEach(function(message) { %>
+                <%- message%>
+                <% }); %>
               </ul>
             </div>
               <br>
@@ -223,7 +241,7 @@
         </div>
         <!--  End Modal -->
       </div>
-     
+
     </div>
     <!--   Core JS Files   -->
     <script src="/assets/js/core/jquery.min.js" type="text/javascript"></script>
@@ -260,6 +278,9 @@
     </script>
     <script src = "/js/room_toolbar_controls.js"></script>
     <script src = "/js/chatroom.js"></script>
+    <script>
+      $("#meeting_link").attr("href", meeeting_link);
+     </script>
   </body>
 
 </html>

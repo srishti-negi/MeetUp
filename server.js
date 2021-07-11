@@ -25,6 +25,7 @@ const {
 
 const User = require('./models/user')
 const Chat = require('./models/chat')
+const Chatroom = require('./models/chatroom')
 
 const passport_config = require('./config_auth/passport-config')
 passport_config(passport);
@@ -82,9 +83,7 @@ app.post('/register',async (req, res) => {
             email: req.body.email,
             password: encrypted_pwd,
         })
-        console.log(user)
         const result = await User.findOne({email: req.body.email}).select("email").lean();
-        console.log("result: " + req.query.email +  result)
         if(result) {
             console.log("user exists!")
             res.redirect('/register')
@@ -106,18 +105,23 @@ app.post('/register',async (req, res) => {
 })
 
 
-app.get('/', checkAuthenticated, (req, res) => {
+app.get('/', checkAuthenticated, async (req, res) => {
     const name = req.user.username;
-    res.render('index', {name: name});
+    const result = await User.findOne({email: req.user.email}).select("chatroom_id").lean();
+    console.log(result)
+    var my_rooms = []
+    if(result)
+        my_rooms = result.chatroom_id;
+    else
+        my_rooms = [""]
+    console.log(my_rooms)
+    res.render('index', {name: name, rooms: my_rooms});
 })
 
-app.get('/profile_page', checkAuthenticated, (req, res) => {
-    res.render('profile_page', {name: req.user.username});
-})
-
-app.get('/my_chatrooms', checkAuthenticated, (req, res) => {
-    res.render('my_chatrooms', {name: req.user.username, email: req.user.email})
-})
+app.get('/chatroom/', (req, res) => { 
+    console.log("Entering room route!");
+    res.redirect(`/chatroom/${uuidv4()}`);
+});
 
 app.get('/chatroom/:room', checkAuthenticated, async (req, res) => {
     const previous_chat = await Chat.aggregate([{
@@ -126,7 +130,6 @@ app.get('/chatroom/:room', checkAuthenticated, async (req, res) => {
           }
         },
       ]);
-    console.log(previous_chat);
     res.render('chatroom2', {room_id: req.params.room, name: req.user.username, email: req.user.email, chat_history: previous_chat});
 }) 
 
@@ -155,7 +158,6 @@ io.on('connection', socket => {
         io.to(room_id).emit('roomData', room = room_id, users = getUsersInRoom(room_id));
 
         socket.on('message', message => {
-            console.log("server just heard this message " + message);
             io.to(room_id).emit('new_message', message, username) 
         })
 
@@ -167,12 +169,33 @@ io.on('connection', socket => {
         })
     })
 
-    socket.on('join-chatroom', (room_id, username) => {
+    socket.on('join-chatroom', async (room_id, username, email) => {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
         today = dd + "/" + mm + "/" + yyyy;
+
+        const result = await Chatroom.findOne({chatroom_id: room_id}).select("chatroom_id").lean();
+        if(result) {
+            Chatroom.updateOne({chatroom_id: room_id},  { $addToSet: {user_emails: email }}, function(err, result) {
+                if (err){
+                  console.log(err);
+                }
+                else{
+                  console.log("Chatroom users updated");
+                }
+            });
+        }
+        else {
+            const new_room = new Chatroom(
+                {
+                    chatroom_id: room_id,
+                    user_emails: [email] 
+                }
+            )
+            new_room.save();
+        }
 
         const new_chat = new Chat(
             {   date_chat_id: today + room_id,
@@ -181,13 +204,13 @@ io.on('connection', socket => {
                 content: ""
             }
         )
+
         Chat.findOne({ date_chat_id: today + room_id}, function(err, chat){
             if(err) {
               console.log(err);
             }
             var message;
             if(chat) {
-              console.log(chat)
                 message = "chat exists";
                 console.log(message)
             } else {
@@ -195,7 +218,7 @@ io.on('connection', socket => {
                 console.log(message)
                 new_chat.save()
                 .then((result) => {
-                    console.log("chat saved " + new_chat)
+                    console.log("chat saved ")
                 })
                 .catch((err) => {
                     console.log(err);
@@ -203,6 +226,15 @@ io.on('connection', socket => {
             }
         })
         
+        User.updateOne({email: email},  { $addToSet: {chatroom_id: room_id }}, function(err, result) {
+            if (err){
+              console.log(err);
+            }
+            else{
+              console.log("User chatrooms updated");
+            }
+        });
+
         socket.join(room_id);  
         socket.on('chat_only_message', message => {
             var d = new Date();
@@ -215,7 +247,7 @@ io.on('connection', socket => {
           
                 }
                 else{
-                  console.log(result);
+                  console.log("chat updated!");
                 }
             });
             io.to(room_id).emit('new_chat_only_message', message, username) 

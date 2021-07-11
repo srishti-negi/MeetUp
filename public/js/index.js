@@ -1,31 +1,46 @@
 let meeting_link = $('#meeting_link')
+let room_link = $('#room_id')
+let room_list = $('.list_teams')
 
-console.log("meeting link: " + meeting_link)
+room_list.empty();
 
-var participant_name;
-
-function update_user_name() {
-    // participant_name =  $('#Username').val();
-    participant_name = user_name;
-    console.log("Inside function: " + participant_name);
-    localStorage.setItem("username", participant_name)
-    now_what()
-}
-
-function now_what() {
-    console.log("Heheheh lets see....");
-    console.log("drumroll " + sessionStorage.getItem("username"));
-}
-
-console.log("Outside func : " + sessionStorage.getItem("username"))
+// for (room in my_rooms) {
+//     room_list.append(`<li><a href = "/chatroom/${my_rooms[room]}"> Room ${room}</li>`)
+// }
+var i = 0;
+my_rooms.forEach(r => {
+    room_list.append(`<li><a href = "/chatroom/${r}"> Team ${i}</li>`);
+    i++;
+})
 
 function create_meeting() {
-    // if($('#Username').val().trim() == null || $('#Username').val().trim() == "") {
-    //     alert("Please enter your username");
-    // }
      if (confirm("Do you want to start a meeting?")) {
         window.open("/video_call")
     } 
+}
+
+function create_room() {
+    if (confirm("Do you want to create a room?")) {
+       window.open("/chatroom")
+   } 
+}
+
+function confirm_room_join() {
+    if (confirm("Do you want to join the room?")) {
+        window.open(room_link.val())
+    } 
+}
+
+function check_room_link_validity() {
+    const room_str = room_link.val();
+    const room_url_start = "http://localhost:3030/chatroom/";
+    const url_len = room_url_start.length;
+    if (room_str.substr(0, url_len) == room_url_start) {
+        confirm_room_join()
+        }
+    else {
+        alert("Please enter valid Room Link")
+    }
 }
 
 function confirm_meet_join() {

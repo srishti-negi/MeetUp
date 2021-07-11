@@ -1,0 +1,20 @@
+.side_by_side_form{
+    width: 48%;
+    float: left;
+}
+
+.side_by_side_form button {
+    padding: 0.8rem;
+    width: 8rem;
+}
+
+.side_bar
+{
+   background-color: rgb(23 25 65 / 30%);
+   left: 0;
+   padding: 5%;
+   padding-top: 8%;
+   width: 20%;
+   height: 100vh;
+   position: fixed;
+}

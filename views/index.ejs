@@ -12,13 +12,17 @@
     <link href="/assets/css/nucleo-icons.css" rel="stylesheet" />
     <!-- CSS Files -->
     <link href="/assets/css/blk-design-system.css?v=1.0.0" rel="stylesheet" />
+    <link href="/css/index.css" rel="stylesheet" />
     <!-- CSS Just for demo purpose, don't include it in your project
     <link href="./assets/demo/demo.css" rel="stylesheet" /> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <% if (name) { %>
       <script>
          var user_name = "<%= name %>";   
-         console.log("name: " + user_name)         
+         console.log("name: " + user_name) 
+         var my_rooms = []
+         var rooms = "<%= rooms %>";     
+         my_rooms = rooms.split(',')   
       </script>
     <% } %>
     <script src = "/user.js"></script>
@@ -65,24 +69,37 @@
               <div class="squares square6"></div>
               <div class="squares square7"></div>
                 <div class="container">
-                
+                  <div class = "side_bar">
+                    <div class = "teams">
+                      <h3>My teams</h3>
+                      <ul class="list_teams">
+
+                      </ul>
+                    </div>
+                    </div>
                     <div class="content-center brand">
                     <h1 class="h1-seo">MeetUp</h1>
-                    <h4>Hi <%= name %></h4>
                     <h3>Meetings, anywhere anytime :)</h3>
-                    <div class = "join_create_meeting">
+                    <h4>Hi <%= name %>!</h4>
+                    <div class = "join_create_meeting side_by_side_form">
                       <form>
                         <input type="text" class="form-control" id = "meeting_link" placeholder="Enter Meeting link ..">
                         <br>
-                        <!-- <input type="text" class="form-control" id = "Username" placeholder="Enter Username" required>
-                        <br> -->
-                        <!-- <input type="submit" value="    Log In    " /> -->
-                        <button type="submit" class="btn btn-primary" onclick = "check_link_validity(); update_user_name()">Join Meeting</button>
-                        <!-- <br> -->
-                        <button type="submit" class="btn btn-primary" onclick = "create_meeting(); update_user_name()">Create Meeting</button>
+                        <button type="submit" class="btn btn-primary" onclick = "check_link_validity();">Join Meeting</button>
+                        <button type="submit" class="btn btn-primary" onclick = "create_meeting();">Create Meeting</button>
                         <br>
-                        <!-- <button onclick = "now_what()">Has the var been updates?</button> -->
                       </form>
+                      </div>
+                      <div class = "join_create_chatroom side_by_side_form">
+                        <form>
+                          <input type="text" class="form-control" id = "room_id" placeholder="Enter Room url ..">
+                          <br>
+                          <button type="submit" class="btn btn-primary" onclick = "check_room_link_validity();">Join Room</button>
+                          <!-- <br> -->
+                          <button type="submit" class="btn btn-primary" onclick = "create_room();">Create Room</button>
+                          <br>
+                          <!-- <button onclick = "now_what()">Has the var been updates?</button> -->
+                        </form>
                       </div>
                     
                 </div>
