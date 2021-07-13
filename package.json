@@ -1,7 +1,7 @@
 {
   "name": "ms_teams_clone",
   "version": "1.0.0",
-  "description": "an MS Teams clone built using NodeJs, PeerJs, SockedIO, ReactJS, WebRTC",
+  "description": "an MS Teams clone built using NodeJs, PeerJs, SockedIO, PeerJS, MongoDB",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

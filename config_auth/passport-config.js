@@ -2,16 +2,10 @@ const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 
-const getUserById = async (id) => {
-    const user =await User.findOne({_id: id});
-    console.log("inside func: " + user.username)
-    return user;
-};
-const getUserByEmail = async (email) => {
-    const user = await User.findOne({email: email});
-    console.log("server: " + user.email);
-    return user;
-};
+// set passport authentication method
+// basically get the user from database
+// decrypt the hashed password in database
+// compare trhe password entered with the decrypted password
 
 function passport_config(passport) {
     var curr_user;
@@ -45,6 +39,8 @@ function passport_config(passport) {
     }
 
     passport.use(new LocalStrategy({usernameField: 'email'}, authenticate_user));
+
+    // set passport serialiser and deserialiser to manage users across various sessions
     passport.serializeUser((user, done) => { console.log("inside serializer " + user.id) ;done(null, user.id)});
     passport.deserializeUser((id, done) => {
         console.log("inside deserializer "); 

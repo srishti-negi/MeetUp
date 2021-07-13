@@ -1,3 +1,4 @@
+// expand the video display grid if the chat and participant button are toggled off
 const expand_main_div = () => {
     var tool_bar = document.getElementById("toolbar");
     tool_bar.style.width = "100%";
@@ -5,6 +6,7 @@ const expand_main_div = () => {
     left_part.style.width = "100%";
 }
 
+// contract the main div in case either the chat or the participants button is toggled on
 const contract_main_div = () => {
     var tool_bar = document.getElementById("toolbar");
     tool_bar.style.width = "80%";
@@ -12,6 +14,7 @@ const contract_main_div = () => {
     left_part.style.width = "80%";
 }
 
+// toggle the chat div
 const toggle_chat = () => {
     var x = document.getElementById("chat");
     var users = document.getElementById("participants");
@@ -28,6 +31,7 @@ const toggle_chat = () => {
     }
 }
 
+// toggle the participants list div
 const toggle_user_list = () => {
     var chat = document.getElementById("chat");
     var users = document.getElementById("participants");

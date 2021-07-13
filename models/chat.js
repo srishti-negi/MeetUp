@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+// set schema for chat database
 const ChatSchema = new Schema({
     date_chat_id: {
         type: String,

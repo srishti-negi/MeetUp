@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
+// set schema foe chatroom database
 const ChatroomSchema = new Schema({
     chatroom_id: {
         type: String,
